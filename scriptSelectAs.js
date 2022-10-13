@@ -1,45 +1,65 @@
-'use strict';
+"use strict";
 
-const sqlUtils = require('./scriptSqlUtils.js');
+const sqlUtils = require("./scriptSqlUtils.js");
 
 const colNameOrdinal = 0;
 
-async function getSqlScriptAsSelectAsync(connectionProfile, tableCatalog, tableSchema, tableName) 
-{
-    let queryText = sqlUtils.getColumnInfoQuerySql(tableCatalog, tableSchema, tableName);
+async function getSqlScriptAsSelectAsync(
+  connectionProfile,
+  tableCatalog,
+  tableSchema,
+  tableName
+) {
+  let queryText = sqlUtils.getColumnInfoQuerySql(
+    tableCatalog,
+    tableSchema,
+    tableName
+  );
 
-    let results = await sqlUtils.getResultsFromQuerySql(connectionProfile, "MSSQL", queryText);
+  let results = await sqlUtils.getResultsFromQuerySql(
+    connectionProfile,
+    "MSSQL",
+    queryText
+  );
 
-    if (!results || results.rowCount === 0) {
-        throw "No se han obtenido resultados de la consulta";
-    }
+  if (!results || results.rowCount === 0) {
+    throw "No query results returned";
+  }
 
-    let updateSqlScript = buildFinalScript(results, tableCatalog, tableSchema, tableName);
+  let updateSqlScript = buildFinalScript(
+    results,
+    tableCatalog,
+    tableSchema,
+    tableName
+  );
 
-    return updateSqlScript;
+  return updateSqlScript;
 }
 
-function buildFinalScript(results, tableCatalog, tableSchema, tableName)
-{
-    let fullScript = [];
-    let columsScriptPart = [];
+function buildFinalScript(results, tableCatalog, tableSchema, tableName) {
+  let fullScript = [];
+  let columsScriptPart = [];
 
-    fullScript.push("SELECT ");
+  fullScript.push("SELECT ");
 
-    let columnIndex = 0;
+  let columnIndex = 0;
 
-    for (let i= 0; i !== results.rowCount; i++) 
-    {
-        let rowData = results.rows[i];
+  for (let i = 0; i !== results.rowCount; i++) {
+    let rowData = results.rows[i];
 
-        const separator = (columnIndex === 0) ? " " : ",";
-        
-        columsScriptPart.push("\t\t" + separator + "[" + rowData[colNameOrdinal].displayValue + "]");
+    const separator = columnIndex === 0 ? " " : ",";
 
-        columnIndex += 1;
-    }
+    columsScriptPart.push(
+      "\t\t" + separator + "[" + rowData[colNameOrdinal].displayValue + "]"
+    );
 
-    return fullScript.concat(columsScriptPart).concat([`FROM [${tableCatalog}].[${tableSchema}].[${tableName}] `]).join('\n');
+    columnIndex += 1;
+  }
+
+  return fullScript
+    .concat(columsScriptPart)
+    .concat([`FROM [${tableCatalog}].[${tableSchema}].[${tableName}] `])
+    .join("\n");
 }
 
 module.exports.getSqlScriptAsSelectAsync = getSqlScriptAsSelectAsync;

@@ -3,7 +3,7 @@ var fs = require('fs');
 
 function download(filename, url) {
   var file = fs.createWriteStream(filename);
-  var request = https.get(url, function(response) {
+  https.get(url, function(response) {
     response.pipe(file);
   });
 }
