@@ -17,7 +17,7 @@ function activate(context)
             getSqlScriptAsInsertAsync(context.connectionProfile, databaseName, schemaName, tableName)
                 .then(scriptText => 
                 {
-                    vscode.env.clipboard.writeText(scriptText).then((text)=>{
+                    vscode.env.clipboard.writeText(scriptText).then(()=>{
                         vscode.window.showInformationMessage('Script copied to clipboard.');
                     });
                 })
@@ -39,7 +39,7 @@ function activate(context)
             getSqlScriptAsInsertAsync(context.connectionProfile, databaseName, schemaName, tableName)
                 .then(scriptText => 
                 {
-                    vscode.commands.executeCommand('newQuery').then(s => {
+                    vscode.commands.executeCommand('newQuery').then(() => {
                         
                         let editor = vscode.window.activeTextEditor;
 
@@ -66,7 +66,7 @@ function activate(context)
             getSqlScriptAsUpdateAsync(context.connectionProfile, databaseName, schemaName, tableName)
                 .then(scriptText => 
                 {
-                    vscode.env.clipboard.writeText(scriptText).then((text)=>{
+                    vscode.env.clipboard.writeText(scriptText).then(()=>{
                         vscode.window.showInformationMessage('Script copied to clipboard.');
                     });
                 })
@@ -89,7 +89,7 @@ function activate(context)
             getSqlScriptAsUpdateAsync(context.connectionProfile, databaseName, schemaName, tableName)
                 .then(scriptText => 
                 {
-                    vscode.commands.executeCommand('newQuery').then(s => {
+                    vscode.commands.executeCommand('newQuery').then(() => {
                         
                         let editor = vscode.window.activeTextEditor;
 
@@ -113,7 +113,7 @@ function activate(context)
             let schemaName = context.nodeInfo.metadata.schema;
             let tableName = context.nodeInfo.metadata.name;
 
-            vscode.env.clipboard.writeText(sqlUtils.getDeleteSqlScript(databaseName, schemaName, tableName)).then((text)=>{
+            vscode.env.clipboard.writeText(sqlUtils.getDeleteSqlScript(databaseName, schemaName, tableName)).then(()=>{
                 vscode.window.showInformationMessage('Script copied to clipboard.');
             });     
         }
@@ -126,7 +126,7 @@ function activate(context)
             let schemaName = context.nodeInfo.metadata.schema;
             let tableName = context.nodeInfo.metadata.name;
 
-            vscode.commands.executeCommand('newQuery').then(s => {
+            vscode.commands.executeCommand('newQuery').then(() => {
                 
                 let editor = vscode.window.activeTextEditor;
 
@@ -148,7 +148,7 @@ function activate(context)
             getSqlScriptAsSelectAsync(context.connectionProfile, databaseName, schemaName, tableName)
                 .then(scriptText => 
                 {
-                    vscode.env.clipboard.writeText(scriptText).then((text)=>{
+                    vscode.env.clipboard.writeText(scriptText).then(()=>{
                         vscode.window.showInformationMessage('Script copied to clipboard.');
                     });
                 })
@@ -171,7 +171,7 @@ function activate(context)
             getSqlScriptAsSelectAsync(context.connectionProfile, databaseName, schemaName, tableName)
                 .then(scriptText => 
                 {
-                    vscode.commands.executeCommand('newQuery').then(s => {
+                    vscode.commands.executeCommand('newQuery').then(() => {
                         
                         let editor = vscode.window.activeTextEditor;
 
