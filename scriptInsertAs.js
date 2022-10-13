@@ -20,7 +20,7 @@ async function getSqlScriptAsInsertAsync(connectionProfile, tableCatalog, tableS
     let results = await sqlUtils.getResultsFromQuerySql(connectionProfile, "MSSQL", queryText);
 
     if (!results || results.rowCount === 0) {
-        throw "No se han obtenido resultados de la consulta";
+        throw "No query results returned";
     }
 
     let insertSqlScript = buildFinalScript(results, tableCatalog, tableSchema, tableName);
