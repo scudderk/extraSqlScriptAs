@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const sqlUtils = require('./scriptSqlUtils.js');
+const sqlUtils = require("./scriptSqlUtils.js");
 
 const colNameOrdinal = 0;
 
@@ -22,6 +22,18 @@ async function getSqlScriptAsDropAndCreateStoredProcedureAsync(
     queryText
   );
 
+  let permissionsText = sqlUtils.getRoutinePermissionsQuerySql(
+    tableCatalog,
+    tableSchema,
+    routineName
+  );
+
+  let permissions = await sqlUtils.getResultsFromQuerySql(
+    connectionProfile,
+    "MSSQL",
+    permissionsText
+  );
+
   if (!results || results.rowCount === 0) {
     throw "No query results returned";
   }
@@ -30,40 +42,49 @@ async function getSqlScriptAsDropAndCreateStoredProcedureAsync(
     results,
     tableCatalog,
     tableSchema,
-    routineName
+    routineName,
+    permissions
   );
 
   return updateSqlScript;
 }
 
-function buildFinalScript(results, tableCatalog, tableSchema, routineName) {
+function buildFinalScript(
+  results,
+  tableCatalog,
+  tableSchema,
+  routineName,
+  permissions
+) {
   let fullScript = [];
   let columsScriptPart = [];
 
-  fullScript.push(`IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[${tableCatalog}].[${tableSchema}].[${routineName}]') AND type in (N'P', N'PC')) `);
-    
-    fullScript.push(`DROP PROCEDURE [${tableSchema}].[${routineName}] `);
-    fullScript.push(`GO \n`);
+  fullScript.push(
+    `IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[${tableCatalog}].[${tableSchema}].[${routineName}]') AND type in (N'P', N'PC'))  \n`
+  );
 
-    fullScript.push(`SET ANSI_NULLS ON `);
-    fullScript.push(`GO \n`);
+  fullScript.push(`DROP PROCEDURE [${tableSchema}].[${routineName}]  \n`);
+  fullScript.push(`GO \n \n`);
 
-    fullScript.push(`SET QUOTED_IDENTIFIER ON `);
-    fullScript.push(`GO \n`);
+  fullScript.push(`SET ANSI_NULLS ON  \n`);
+  fullScript.push(`GO \n \n`);
 
-
+  fullScript.push(`SET QUOTED_IDENTIFIER ON  \n`);
+  fullScript.push(`GO \n \n`);
 
   for (let i = 0; i !== results.rowCount; i++) {
     let rowData = results.rows[i];
 
-    columsScriptPart.push(
-      rowData[colNameOrdinal].displayValue
-    );
+    columsScriptPart.push(rowData[colNameOrdinal].displayValue);
   }
 
-  return fullScript
-    .concat(columsScriptPart)
-    .join("");
+  for (let i = 0; i !== permissions.rowCount; i++) {
+    let rowData = permissions.rows[i];
+
+    columsScriptPart.push(rowData[colNameOrdinal].displayValue);
+  }
+
+  return fullScript.concat(columsScriptPart).join("");
 }
 
 module.exports.getSqlScriptAsDropAndCreateStoredProcedureAsync =

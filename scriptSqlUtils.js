@@ -108,9 +108,64 @@ function getColTypeString (dataType, charMaxLen, numericPrecision, numericScale,
 
     return typeParts.join('');
 }
+function getRoutinePermissionsQuerySql(tableCatalog, tableSchema, routineName) {
+    return `USE [${tableCatalog}]
+    CREATE TABLE #roles (roleText VARCHAR(50))
+    INSERT INTO #roles
+    VALUES ('AccountConfirm'),
+    ('AccountRequest'),
+    ('Admin'),
+    ('AgencyRentUser'),
+    ('AgencySuperUser'),
+    ('AgencyUser'),
+    ('AllDataAgencyUser'),
+    ('AllDataPlus'),
+    ('AllDataUser'),
+    ('AllDataUserNoReports'),
+    ('DistrictAdmin'),
+    ('DistrictRoot'),
+    ('DistrictUser'),
+    ('HelpDeskUser'),
+    ('LegalTeam'),
+    ('MARAC'),
+    ('MARACRK'),
+    ('MARACUser'),
+    ('PSL'),
+    ('RefugeUser'),
+    ('RentsUser'),
+    ('Reportuser'),
+    ('RS'),
+    ('SuperUser'),
+    ('SVUser'),
+    ('User'),
+    ('AdminNoAdmin')
+	
+	
+	
+	SELECT
+    (
+		'GRANT ' + 
+        CASE 
+			WHEN 
+				LEFT('${routineName}', 3) != 'tbl' 
+				THEN 
+					'EXECUTE' 
+				ELSE 
+					'SELECT'
+			END +
+        ' ON ' + '[${tableSchema}].[${routineName}]' +
+        ' TO ' + '[' + r.roleText + '] \nGO \n \n'
+    ) AS GRANT_STMT,
+	*
+    FROM #roles r
+
+	drop table #roles`;
+}
+
 
 module.exports.getRoutineInfoQuerySql = getRoutineInfoQuerySql;
 module.exports.getResultsFromQuerySql = getResultsFromQuerySql;
 module.exports.getColTypeString = getColTypeString;
 module.exports.getColumnInfoQuerySql = getColumnInfoQuerySql;
 module.exports.getDeleteSqlScript = getDeleteSqlScript;
+module.exports.getRoutinePermissionsQuerySql = getRoutinePermissionsQuerySql;

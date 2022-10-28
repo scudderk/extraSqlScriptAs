@@ -39,6 +39,10 @@ Can be raised here: https://github.com/pacoweb/extraSqlScriptAs/issues
 
 ## Release Notes
 
+### 0.7.0
+
+- Added Permissions to scripting
+
 ### 0.6.0
 
 - Added Script Stored procedure as DROP AND CREATE
