@@ -1,20 +1,17 @@
-
-const azdata = require('azdata');
+const azdata = require('azdata')
 
 function getRoutineInfoQuerySql(tableCatalog, tableSchema, routineName) {
-    return `USE [${tableCatalog}]
-            EXEC sp_helptext '${tableSchema}.${routineName}'`;
+	return `USE [${tableCatalog}]
+            EXEC sp_helptext '${tableSchema}.${routineName}'`
 }
 
-function getDeleteSqlScript(tableCatalog, tableSchema, tableName)
-{
-    return `DELETE FROM [${tableCatalog}].[${tableSchema}].[${tableName}]
-    WHERE <Search Conditions,,>`;
+function getDeleteSqlScript(tableCatalog, tableSchema, tableName) {
+	return `DELETE FROM [${tableCatalog}].[${tableSchema}].[${tableName}]
+    WHERE <Search Conditions,,>`
 }
 
-function getColumnInfoQuerySql(tableCatalog, tableSchema, tableName)
-{
-    return `SELECT 
+function getColumnInfoQuerySql(tableCatalog, tableSchema, tableName) {
+	return `SELECT 
         COL.COLUMN_NAME,
         COL.DATA_TYPE,
         COL.CHARACTER_MAXIMUM_LENGTH,
@@ -46,70 +43,112 @@ function getColumnInfoQuerySql(tableCatalog, tableSchema, tableName)
         AND T.TABLE_SCHEMA = '${tableSchema}' 
         AND T.TABLE_CATALOG = '${tableCatalog}' 
         AND T.TABLE_NAME = '${tableName}' 
-        ORDER BY COL.ORDINAL_POSITION`;
+        ORDER BY COL.ORDINAL_POSITION`
 }
 
-async function getResultsFromQuerySql(connectionProfile, providerText, queryText) 
-{
-    let connectionResult = await azdata.connection.connect(connectionProfile, false, false);
-    let connectionUri = await azdata.connection.getUriForConnection(connectionResult.connectionId);
+async function getResultsFromQuerySql(connectionProfile, providerText, queryText) {
+	let connectionResult = await azdata.connection.connect(connectionProfile, false, false)
+	let connectionUri = await azdata.connection.getUriForConnection(connectionResult.connectionId)
 
-    let queryProvider = azdata.dataprotocol.getProvider(providerText, azdata.DataProviderType.QueryProvider);
+	let queryProvider = azdata.dataprotocol.getProvider(
+		providerText,
+		azdata.DataProviderType.QueryProvider
+	)
 
-    return await queryProvider.runQueryAndReturn(connectionUri, queryText);
+	return await queryProvider.runQueryAndReturn(connectionUri, queryText)
 }
 
-function getColTypeString (dataType, charMaxLen, numericPrecision, numericScale, isNullable, datetimePrecision)
-{
-    const scaleDataTypes = ["decimal", "numeric"];
-    const precisionDataTypes = ["time", "datetimeoffset", "datetime2"];
-    const maxLenDataTypes = ["char", "nchar", "varchar", "nvarchar", "varbinary"];
+function getColTypeString(
+	dataType,
+	charMaxLen,
+	numericPrecision,
+	numericScale,
+	isNullable,
+	datetimePrecision
+) {
+	const scaleDataTypes = ['decimal', 'numeric']
+	const precisionDataTypes = ['time', 'datetimeoffset', 'datetime2']
+	const maxLenDataTypes = ['char', 'nchar', 'varchar', 'nvarchar', 'varbinary']
 
-    let typeParts = [];
+	let typeParts = []
 
-    typeParts.push("<");
-    typeParts.push(dataType);
+	typeParts.push('<')
+	typeParts.push(dataType)
 
-    if(maxLenDataTypes.includes(dataType))
-    {
-        typeParts.push("(");
-        
-        if(charMaxLen === "-1")
-            typeParts.push("MAX");
-        else
-            typeParts.push(charMaxLen);
+	if (maxLenDataTypes.includes(dataType)) {
+		typeParts.push('(')
 
-        typeParts.push(")"); 
-    }  
+		if (charMaxLen === '-1') typeParts.push('MAX')
+		else typeParts.push(charMaxLen)
 
-    if(precisionDataTypes.includes(dataType) || scaleDataTypes.includes(dataType))
-    {
-        typeParts.push("(");
-        
-        if(numericPrecision === "NULL")
-            typeParts.push(datetimePrecision);
-        else
-            typeParts.push(numericPrecision);
+		typeParts.push(')')
+	}
 
-        if(numericScale !== "NULL" && numericScale === "0"){
-            typeParts.push(",");
-            typeParts.push(numericScale);
-        }
+	if (precisionDataTypes.includes(dataType) || scaleDataTypes.includes(dataType)) {
+		typeParts.push('(')
 
-        typeParts.push(")"); 
-    }  
+		if (numericPrecision === 'NULL') typeParts.push(datetimePrecision)
+		else typeParts.push(numericPrecision)
 
-    if(isNullable === "YES")
-    {
-        typeParts.push(", NULLABLE"); 
+		if (numericScale !== 'NULL' && numericScale === '0') {
+			typeParts.push(',')
+			typeParts.push(numericScale)
+		}
+
+		typeParts.push(')')
+	}
+
+	if (isNullable === 'YES') {
+		typeParts.push(', NULLABLE')
+	}
+
+	typeParts.push('>')
+
+	return typeParts.join('')
+}
+function getColTypeAsCSharpString(
+	dataType,
+	isNullable,
+) {
+	let typeParts = []
+
+	let cSharpDT = ''
+	switch (dataType) {
+		case 'nvarchar':
+		case 'varchar':
+		case 'char':
+		case 'nchar':
+		case 'varbinary':
+			cSharpDT = 'string?'
+			break
+		case 'decimal':
+		case 'numberic':
+			cSharpDT = 'double'
+			break
+		case 'time':
+			cSharpDT = 'TimeOnly'
+			break
+		case 'datetime':
+		case 'datetime2':
+			cSharpDT = 'DateTime'
+			break
+		case 'int':
+			cSharpDT = 'int'
+			break
+		default:
+			break
+	}
+    
+	if (isNullable === 'YES') {
+		cSharpDT += '?'
     }
-
-    typeParts.push(">");
-
-    return typeParts.join('');
+    
+    typeParts.push(cSharpDT)
+    
+	return typeParts.join('')
 }
 function getRoutinePermissionsQuerySql(tableCatalog, tableSchema, routineName) {
-    return `USE [${tableCatalog}]
+	return `USE [${tableCatalog}]
     CREATE TABLE #roles (roleText VARCHAR(50))
     INSERT INTO #roles
     VALUES ('AccountConfirm'),
@@ -159,13 +198,13 @@ function getRoutinePermissionsQuerySql(tableCatalog, tableSchema, routineName) {
 	*
     FROM #roles r
 
-	drop table #roles`;
+	drop table #roles`
 }
 
-
-module.exports.getRoutineInfoQuerySql = getRoutineInfoQuerySql;
-module.exports.getResultsFromQuerySql = getResultsFromQuerySql;
-module.exports.getColTypeString = getColTypeString;
-module.exports.getColumnInfoQuerySql = getColumnInfoQuerySql;
-module.exports.getDeleteSqlScript = getDeleteSqlScript;
-module.exports.getRoutinePermissionsQuerySql = getRoutinePermissionsQuerySql;
+module.exports.getRoutineInfoQuerySql = getRoutineInfoQuerySql
+module.exports.getResultsFromQuerySql = getResultsFromQuerySql
+module.exports.getColTypeString = getColTypeString
+module.exports.getColTypeAsCSharpString = getColTypeAsCSharpString
+module.exports.getColumnInfoQuerySql = getColumnInfoQuerySql
+module.exports.getDeleteSqlScript = getDeleteSqlScript
+module.exports.getRoutinePermissionsQuerySql = getRoutinePermissionsQuerySql

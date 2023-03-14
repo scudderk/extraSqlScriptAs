@@ -3,6 +3,7 @@ const vscode = require('vscode');
 const {getSqlScriptAsInsertAsync} = require('./scriptInsertAs.js');
 const {getSqlScriptAsUpdateAsync} = require('./scriptUpdateAs.js');
 const {getSqlScriptAsSelectAsync} = require('./scriptSelectAs.js');
+const {getSqlScriptAsClassAsync} = require('./scriptClassAs.js');
 const {
   getSqlScriptAsDropAndCreateStoredProcedureAsync,
 } = require("./scriptSPAs.js");
@@ -190,7 +191,48 @@ function activate(context)
                     }
             );      
         }
-    );
+  );
+  let classFromTableCommandToClipBoard = vscode.commands.registerCommand(
+		'extraSqlScriptAs.classFromTableToClipboard',
+		function (context) {
+			let databaseName = context.connectionProfile.databaseName
+			let schemaName = context.nodeInfo.metadata.schema
+			let tableName = context.nodeInfo.metadata.name
+
+			getSqlScriptAsClassAsync(context.connectionProfile, databaseName, schemaName, tableName)
+				.then((scriptText) => {
+					vscode.env.clipboard.writeText(scriptText).then(() => {
+						vscode.window.showInformationMessage('Script copied to clipboard.')
+					})
+				})
+				.catch((reason) => {
+					vscode.window.showErrorMessage(reason)
+				})
+		}
+	)
+
+	let classFromTableCommand = vscode.commands.registerCommand(
+		'extraSqlScriptAs.classFromTable',
+		function (context) {
+			let databaseName = context.connectionProfile.databaseName
+			let schemaName = context.nodeInfo.metadata.schema
+			let tableName = context.nodeInfo.metadata.name
+
+			getSqlScriptAsClassAsync(context.connectionProfile, databaseName, schemaName, tableName)
+				.then((scriptText) => {
+					vscode.commands.executeCommand('newQuery').then(() => {
+						let editor = vscode.window.activeTextEditor
+
+						editor.edit((edit) => {
+							edit.insert(new vscode.Position(0, 0), scriptText)
+						})
+					})
+				})
+				.catch((reason) => {
+					vscode.window.showErrorMessage(reason)
+				})
+		}
+	)
 
     let dropAndCreateSPCommandToClipBoard = vscode.commands.registerCommand(
       "extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
@@ -319,6 +361,9 @@ function activate(context)
 
     context.subscriptions.push(dropAndCreateFuncCommand);
     context.subscriptions.push(dropAndCreateFuncCommandToClipBoard);
+  
+    context.subscriptions.push(classFromTableCommand)
+		context.subscriptions.push(classFromTableCommandToClipBoard)
 };
 
 function deactivate() {

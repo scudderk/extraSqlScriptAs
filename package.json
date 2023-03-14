@@ -1,169 +1,189 @@
 {
-  "name": "extra-sql-script-as",
-  "displayName": "Extra Sql Script As",
-  "description": "This extension adds several missing options to the context menu of the object tree: Script Table as INSERT, Script Table as UPDATE...",
-  "publisher": "pacoweb",
-  "version": "0.8.0",
-  "license": "https://raw.githubusercontent.com/pacoweb/extraSqlScriptAs/master/LICENSE",
-  "icon": "images/default_icon.png",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pacoweb/extraSqlScriptAs.git"
-  },
-  "engines": {
-    "vscode": "*",
-    "azdata": "*"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:extraSqlScriptAs.insertTable",
-    "onCommand:extraSqlScriptAs.updateTable",
-    "onCommand:extraSqlScriptAs.deleteTable",
-    "onCommand:extraSqlScriptAs.selectTable",
-    "onCommand:extraSqlScriptAs.dropandCreateStoredProcedure",
-    "onCommand:extraSqlScriptAs.dropandCreateFunction",
-    "onCommand:extraSqlScriptAs.insertTableToClipboard",
-    "onCommand:extraSqlScriptAs.updateTableToClipboard",
-    "onCommand:extraSqlScriptAs.deleteTableToClipboard",
-    "onCommand:extraSqlScriptAs.selectTableToClipboard",
-    "onCommand:extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
-    "onCommand:extraSqlScriptAs.dropandCreateFunctionToClipboard"
-  ],
-  "main": "./extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "extraSqlScriptAs.insertTable",
-        "title": "Script Table as INSERT"
-      },
-      {
-        "command": "extraSqlScriptAs.updateTable",
-        "title": "Script Table as UPDATE"
-      },
-      {
-        "command": "extraSqlScriptAs.deleteTable",
-        "title": "Script Table as DELETE"
-      },
-      {
-        "command": "extraSqlScriptAs.selectTable",
-        "title": "Script Table as SELECT"
-      },
-      {
-        "command": "extraSqlScriptAs.dropandCreateStoredProcedure",
-        "title": "Script Stored procedure as DROP AND CREATE"
-      },
-      {
-        "command": "extraSqlScriptAs.dropandCreateFunction",
-        "title": "Script Functions as DROP AND CREATE"
-      },
-      {
-        "command": "extraSqlScriptAs.insertTableToClipboard",
-        "title": "Script Table as INSERT to clipboard"
-      },
-      {
-        "command": "extraSqlScriptAs.updateTableToClipboard",
-        "title": "Script Table as UPDATE to clipboard"
-      },
-      {
-        "command": "extraSqlScriptAs.deleteTableToClipboard",
-        "title": "Script Table as DELETE to clipboard"
-      },
-      {
-        "command": "extraSqlScriptAs.selectTableToClipboard",
-        "title": "Script Table as SELECT to clipboard"
-      },
-      {
-        "command": "extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
-        "title": "Script Stored procedure as DROP AND CREATE to clipboard"
-      },
-      {
-        "command": "extraSqlScriptAs.dropandCreateFunctionToClipboard",
-        "title": "Script Functions as DROP AND CREATE to clipboard"
-      }
-    ],
-    "menus": {
-      "objectExplorer/item/context": [
-        {
-          "command": "extraSqlScriptAs.insertTable",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.updateTable",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.deleteTable",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.selectTable",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.dropandCreateStoredProcedure",
-          "when": "connectionProvider == MSSQL && nodeType == StoredProcedure",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.dropandCreateFunction",
-          "when": "connectionProvider == MSSQL && nodeType == ScalarValuedFunction",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.insertTableToClipboard",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.updateTableToClipboard",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.deleteTableToClipboard",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.selectTableToClipboard",
-          "when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
-          "when": "connectionProvider == MSSQL && nodeType == StoredProcedure",
-          "group": "1data1"
-        },
-        {
-          "command": "extraSqlScriptAs.dropandCreateFunctionToClipboard",
-          "when": "connectionProvider == MSSQL && nodeType == ScalarValuedFunction",
-          "group": "1data1"
-        }
-      ]
-    }
-  },
-  "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js",
-    "proposedapi": "node installTypings.js"
-  },
-  "devDependencies": {
-    "@types/azdata": "1.39.0",
-    "@types/glob": "^8.0.0",
-    "@types/mocha": "^10.0.0",
-    "@types/node": "^18.8.5",
-    "@types/vscode": "^1.72.0",
-    "eslint": "^8.25.0",
-    "glob": "^8.0.3",
-    "mocha": "^10.0.0",
-    "typescript": "^4.8.4",
-    "vscode-test": "^1.6.1"
-  }
+	"name": "extra-sql-script-as",
+	"displayName": "Extra Sql Script As",
+	"description": "This extension adds several missing options to the context menu of the object tree: Script Table as INSERT, Script Table as UPDATE...",
+	"publisher": "pacoweb",
+	"version": "0.9.0",
+	"license": "https://raw.githubusercontent.com/pacoweb/extraSqlScriptAs/master/LICENSE",
+	"icon": "images/default_icon.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pacoweb/extraSqlScriptAs.git"
+	},
+	"engines": {
+		"vscode": "*",
+		"azdata": "*"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extraSqlScriptAs.insertTable",
+		"onCommand:extraSqlScriptAs.updateTable",
+		"onCommand:extraSqlScriptAs.deleteTable",
+		"onCommand:extraSqlScriptAs.selectTable",
+		"onCommand:extraSqlScriptAs.classFromTable",
+		"onCommand:extraSqlScriptAs.dropandCreateStoredProcedure",
+		"onCommand:extraSqlScriptAs.dropandCreateFunction",
+		"onCommand:extraSqlScriptAs.insertTableToClipboard",
+		"onCommand:extraSqlScriptAs.updateTableToClipboard",
+		"onCommand:extraSqlScriptAs.deleteTableToClipboard",
+		"onCommand:extraSqlScriptAs.selectTableToClipboard",
+		"onCommand:extraSqlScriptAs.classFromTableToClipboard",
+		"onCommand:extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
+		"onCommand:extraSqlScriptAs.dropandCreateFunctionToClipboard"
+	],
+	"main": "./extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extraSqlScriptAs.insertTable",
+				"title": "Script Table as INSERT"
+			},
+			{
+				"command": "extraSqlScriptAs.updateTable",
+				"title": "Script Table as UPDATE"
+			},
+			{
+				"command": "extraSqlScriptAs.deleteTable",
+				"title": "Script Table as DELETE"
+			},
+			{
+				"command": "extraSqlScriptAs.selectTable",
+				"title": "Script Table as SELECT"
+			},
+			{
+				"command": "extraSqlScriptAs.classFromTable",
+				"title": "Script Table as C# class"
+			},
+			{
+				"command": "extraSqlScriptAs.dropandCreateStoredProcedure",
+				"title": "Script Stored procedure as DROP AND CREATE"
+			},
+			{
+				"command": "extraSqlScriptAs.dropandCreateFunction",
+				"title": "Script Functions as DROP AND CREATE"
+			},
+			{
+				"command": "extraSqlScriptAs.insertTableToClipboard",
+				"title": "Script Table as INSERT to clipboard"
+			},
+			{
+				"command": "extraSqlScriptAs.updateTableToClipboard",
+				"title": "Script Table as UPDATE to clipboard"
+			},
+			{
+				"command": "extraSqlScriptAs.deleteTableToClipboard",
+				"title": "Script Table as DELETE to clipboard"
+			},
+			{
+				"command": "extraSqlScriptAs.selectTableToClipboard",
+				"title": "Script Table as SELECT to clipboard"
+			},
+			{
+				"command": "extraSqlScriptAs.classFromTableToClipboard",
+				"title": "Script Table as C# class to clipboard"
+			},
+			{
+				"command": "extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
+				"title": "Script Stored procedure as DROP AND CREATE to clipboard"
+			},
+			{
+				"command": "extraSqlScriptAs.dropandCreateFunctionToClipboard",
+				"title": "Script Functions as DROP AND CREATE to clipboard"
+			}
+		],
+		"menus": {
+			"objectExplorer/item/context": [
+				{
+					"command": "extraSqlScriptAs.insertTable",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.updateTable",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.deleteTable",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.selectTable",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.classFromTable",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.dropandCreateStoredProcedure",
+					"when": "connectionProvider == MSSQL && nodeType == StoredProcedure",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.dropandCreateFunction",
+					"when": "connectionProvider == MSSQL && nodeType == ScalarValuedFunction || nodeType == TableValuedFunction",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.insertTableToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.updateTableToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.deleteTableToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.selectTableToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.classFromTableToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType && nodeType == Table",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.dropandCreateStoredProcedureToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType == StoredProcedure",
+					"group": "1data1"
+				},
+				{
+					"command": "extraSqlScriptAs.dropandCreateFunctionToClipboard",
+					"when": "connectionProvider == MSSQL && nodeType == ScalarValuedFunction || nodeType == TableValuedFunction",
+					"group": "1data1"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "node ./test/runTest.js",
+		"proposedapi": "node installTypings.js"
+	},
+	"devDependencies": {
+		"@types/azdata": "1.39.0",
+		"@types/glob": "^8.0.0",
+		"@types/mocha": "^10.0.0",
+		"@types/node": "^18.8.5",
+		"@types/vscode": "^1.72.0",
+		"eslint": "^8.25.0",
+		"glob": "^8.0.3",
+		"mocha": "^10.0.0",
+		"typescript": "^4.8.4",
+		"vscode-test": "^1.6.1"
+	}
 }

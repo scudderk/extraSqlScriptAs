@@ -10,6 +10,8 @@ This extension adds several missing options to the context menu of the object tr
 * Script Table as DELETE to clipboard
 * Script Table as SELECT
 * Script Table as SELECT to clipboard
+* Script Table as Table as C# Class
+* Script Table as Table as C# Class to clipboard
 * Script Stored procedure as DROP AND CREATE
 * Script Stored procedure as DROP AND CREATE to clipboard
 * Script Function as DROP AND CREATE
@@ -26,9 +28,9 @@ This extension adds several missing options to the context menu of the object tr
 #### Script Table as SELECT
 ![Import a Script](https://raw.githubusercontent.com/pacoweb/extraSqlScriptAs/master/images/select_capture.gif)
 #### Script Stored procedure as DROP AND CREATE
-![Import a Script](https://raw.githubusercontent.com/pacoweb/extraSqlScriptAs/master/images/stored_procedure_capture.gif)
+![Import a Script](https://raw.githubusercontent.com/scudderk/extraSqlScriptAs/master/images/stored_procedure_capture.gif)
 #### Script Function as DROP AND CREATE
-![Import a Script](https://raw.githubusercontent.com/pacoweb/extraSqlScriptAs/master/images/function_capture.gif)
+![Import a Script](https://raw.githubusercontent.com/scudderk/extraSqlScriptAs/master/images/function_capture.gif)
 
 ## Known Issues
 
@@ -36,6 +38,10 @@ No open issues at this time.
 
 ## Unknown Issues
 Can be raised here: https://github.com/pacoweb/extraSqlScriptAs/issues
+
+### 0.9.0
+
+- Added Script as C# Class function
 
 ## Release Notes
 

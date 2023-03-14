@@ -4,6 +4,11 @@ All notable changes to the "extraSqlScriptAs" extension will be documented in th
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.9.0
+
+### Added
+- Added Script as C# class option to tables
+
 ## 0.8.0
 
 ### Updates
