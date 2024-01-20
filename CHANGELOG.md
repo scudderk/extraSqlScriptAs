@@ -14,6 +14,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 	- float
 	- smallint
 	- bit
+- Removed `isComputed` from `[Key]` calculations
 
 ## 0.9.1
 

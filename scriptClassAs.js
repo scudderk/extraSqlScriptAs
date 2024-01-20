@@ -36,7 +36,7 @@ function buildFinalScript(results, tableName) {
 		let isComputed = rowData[colComputedOrdinal].displayValue
 		let IsIdentity = rowData[colIsIdentityOrdinal].displayValue
 
-		if (isComputed === '1' || IsIdentity === '1') {
+		if (IsIdentity === '1') {
 			valuesScriptPart.push('\t[Key]')
 		}
 
