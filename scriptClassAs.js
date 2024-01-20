@@ -25,8 +25,8 @@ async function getSqlScriptAsClassAsync(connectionProfile, tableCatalog, tableSc
 function buildFinalScript(results, tableName) {
 	let fullScript = []
 	let valuesScriptPart = []
-
-	fullScript.push(`public class ${tableName.substring(2, tableName.length)}`)
+	tableName = tableName.startsWith("tbl") ? tableName.slice(3) : tableName;
+	fullScript.push(`public class ${tableName}`)
 
 	valuesScriptPart.push('{')
 
