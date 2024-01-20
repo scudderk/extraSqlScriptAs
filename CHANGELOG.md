@@ -24,6 +24,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Removed `tableCatalog` from stored procedure and function scripting existance check
 - Removed extra space in `IF EXISTS` statments for stored procedures and functions
 
-## [Unreleased]
+### 0.7.0
 
-- Initial release
+- Added Permissions to scripting
+
+### 0.6.0
+
+- Added Script Stored procedure as DROP AND CREATE
+- Added Script Function as DROP AND CREATE
+
+### 0.5.0
+
+- Added Script Table as SELECT
+
+### 0.1.0
+
+- Initial release.
