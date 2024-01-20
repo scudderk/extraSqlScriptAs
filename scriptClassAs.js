@@ -17,7 +17,7 @@ async function getSqlScriptAsClassAsync(connectionProfile, tableCatalog, tableSc
 		throw 'No query results returned'
 	}
 
-	let classSqlScript = buildFinalScript(results, tableCatalog)
+	let classSqlScript = buildFinalScript(results, tableName)
 
 	return classSqlScript
 }
