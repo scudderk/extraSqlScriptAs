@@ -136,6 +136,7 @@ function getColTypeAsCSharpString(dataType, isNullable) {
     case "decimal":
     case "numberic":
     case "float":
+    case "money":
       cSharpDT = "double";
       break;
     case "time":

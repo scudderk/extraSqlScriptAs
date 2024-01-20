@@ -4,6 +4,12 @@ All notable changes to the "extraSqlScriptAs" extension will be documented in th
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.10.1
+
+### Fixes
+- Added the following missing data types:
+	- money
+
 ## 0.10.0
 
 ### Fixes

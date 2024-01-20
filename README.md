@@ -39,6 +39,12 @@ No open issues at this time.
 ## Unknown Issues
 Can be raised here: https://github.com/pacoweb/extraSqlScriptAs/issues
 
+## 0.10.1
+
+### Fixes
+- Added the following missing data types:
+	- money
+
 ## 0.10.0
 
 ### Fixes
