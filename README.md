@@ -39,6 +39,27 @@ No open issues at this time.
 ## Unknown Issues
 Can be raised here: https://github.com/pacoweb/extraSqlScriptAs/issues
 
+## 0.10.0
+
+### Fixes
+- Added the following missing data types:
+	- text
+	- timestamp
+	- ntext
+	- float
+	- smallint
+	- bit
+- Removed `isComputed` from `[Key]` calculations
+
+## 0.9.1
+
+### Updates
+
+- If the table starts with `tbl` it is now trimmed from the outputted class name.
+
+### Fixes
+- Fixed Script as C# class outputting table `tableCatalog` (database name). Now outputs table name as class name.
+
 ### 0.9.0
 
 - Added Script as C# Class function
